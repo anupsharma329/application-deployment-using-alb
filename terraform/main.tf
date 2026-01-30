@@ -94,7 +94,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
-# Security group for app instances - allow traffic only from ALB on app port (3000)
+# Security group for app instances - allow traffic from ALB on app port (3000) and SSH for debugging
 resource "aws_security_group" "app" {
   name        = "app-sg"
   description = "Security group for Node.js app instances"
@@ -106,6 +106,13 @@ resource "aws_security_group" "app" {
     protocol        = "tcp"
     security_groups = [aws_security_group.alb.id]
     description     = "Allow traffic from ALB to app port"
+  }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "SSH for EC2 Instance Connect (no PEM needed)"
   }
   egress {
     from_port   = 0
