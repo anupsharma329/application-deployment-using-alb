@@ -39,10 +39,13 @@ resource "aws_launch_template" "blue" {
     git clone https://github.com/anupsharma123/blue-green-deployment.git
     cd blue-green-deployment/app/blue
     npm install
+    sed -i "s/}).listen(3000);/}).listen(3000, '0.0.0.0');/" app.js || true
+    chown -R ubuntu:ubuntu /home/ubuntu/blue-green-deployment
     cat > /etc/systemd/system/nodeapp.service << 'SVC'
 [Unit]
 Description=Node.js Blue App
-After=network.target
+After=network-online.target
+Wants=network-online.target
 [Service]
 Type=simple
 User=ubuntu
@@ -55,7 +58,8 @@ WantedBy=multi-user.target
 SVC
     systemctl daemon-reload
     systemctl enable --now nodeapp
-    sleep 3
+    sleep 5
+    curl -sf http://127.0.0.1:3000/ || echo "Health check failed"
     systemctl status nodeapp --no-pager || true
 EOF
   )
@@ -80,10 +84,13 @@ resource "aws_launch_template" "green" {
     git clone https://github.com/anupsharma123/blue-green-deployment.git
     cd blue-green-deployment/app/green
     npm install
+    sed -i "s/}).listen(3000);/}).listen(3000, '0.0.0.0');/" app.js || true
+    chown -R ubuntu:ubuntu /home/ubuntu/blue-green-deployment
     cat > /etc/systemd/system/nodeapp.service << 'SVC'
 [Unit]
 Description=Node.js Green App
-After=network.target
+After=network-online.target
+Wants=network-online.target
 [Service]
 Type=simple
 User=ubuntu
@@ -96,7 +103,8 @@ WantedBy=multi-user.target
 SVC
     systemctl daemon-reload
     systemctl enable --now nodeapp
-    sleep 3
+    sleep 5
+    curl -sf http://127.0.0.1:3000/ || echo "Health check failed"
     systemctl status nodeapp --no-pager || true
   EOF
   )
