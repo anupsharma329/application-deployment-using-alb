@@ -1,13 +1,34 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform.tfstate.lock.info
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
 
-./terraform/launch-templates-alternative.tf
+# Terraform in subdirectory
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfstate.backup
+terraform/.terraform.tfstate.lock.info
+terraform/launch-templates-alternative.tf.example
 
-./terraform/terraform.tfstate.backup
-./terraform/terraform.tfstate
-./terraform/terraform.tfstate.backup
-./terraform/terraform.tfstate.backup    
+# Optional: ignore alternative example if you don't want it tracked
+# terraform/launch-templates-alternative.tf.example
 
-./terraform/.terraform.lock.hcl
-./terraform/.terraform.tfstate.lock.info
-./terraform/.terraform.tfstate.lock.info
+# OS / Editor
+.DS_Store
+*.swp
+*.swo
+*~
 
-./terraform/.terraform/
+# Node (if any at root)
+node_modules/
