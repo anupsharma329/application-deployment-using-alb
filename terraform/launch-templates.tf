@@ -97,9 +97,8 @@ resource "aws_launch_template" "blue" {
 
     echo "User-data completed."
     EOF
-    )
+  )
 }
-
 resource "aws_launch_template" "green" {
   name_prefix   = "green-template-"
   image_id      = data.aws_ami.ubuntu.id
@@ -177,5 +176,5 @@ resource "aws_launch_template" "green" {
 
     echo "User-data completed."
     EOF
-    )
+  )
 }
